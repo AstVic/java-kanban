@@ -1,39 +1,25 @@
 public class Task {
-    protected String name;
-    protected String description;
-    protected final int id;
-    protected TaskStatus status;
-    protected TaskType type;
+    private final String name;
+    private final String description;
+    private int id;
+    private TaskStatus status;
 
     @Override
     public String toString() {
-        String result = "name=" + name + ", description=";
+        String result = "name='" + name + "', description=";
         if (description != null)
             result += description.length();
         else
             result += "0";
-        result += ", id=" + id + ", status=" + status.toString() + ", type=" + type.toString();
+        result += ", id='" + id + "', status='" + status.toString() + "'";
         return result;
     }
 
-    public Task() {
-        name = "name";
-        description = "description";
-        id = TaskManager.getNewId();
-        status = TaskStatus.NEW;
-        type = TaskType.TASK;
-    }
-
-    public Task(String name, String description, TaskStatus status) {
+    public Task(String name, String description, TaskStatus status, int id) {
         this.name = name;
         this.description = description;
-        this.id = TaskManager.getNewId();
+        this.id = id;
         this.status = status;
-        type = TaskType.TASK;
-    }
-
-    public TaskType getType() {
-        return type;
     }
 
     public int getId() {
@@ -46,6 +32,10 @@ public class Task {
 
     public TaskStatus getStatus() {
         return status;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

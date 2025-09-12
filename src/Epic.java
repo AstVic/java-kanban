@@ -1,68 +1,33 @@
-import javax.crypto.spec.PSource;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Epic extends Task {
-    private HashMap<Integer, SubTask> subTasks = new HashMap<>();
+    private ArrayList<Integer> subTasksID = new ArrayList<>();
 
     @Override
     public String toString() {
-        return (super.toString() + ", " + "\n subTasks=" + subTasks.toString());
+        return (super.toString() + ", " + "\n subTasks=" + subTasksID.toString());
     }
 
-    public Epic() {
-        super();
-        type = TaskType.EPIC;
+    public Epic(String name, String description, int id) {
+        super(name, description, TaskStatus.NEW, id);
     }
 
-    public Epic(String name, String description) {
-        super(name, description, TaskStatus.NEW);
-        type = TaskType.EPIC;
-    }
-
-    public void printSubTasks() {
-        int i = 1;
-        for (Integer key : subTasks.keySet()) {
-            System.out.print((i++) + ". " + subTasks.get(key));
-        }
-    }
-
-    public HashMap<Integer, SubTask> getSubTasks() {
-        return subTasks;
+    public ArrayList<Integer> getSubTasksID() {
+        return subTasksID;
     }
 
     public void addSubTask(SubTask subTask) {
-        subTasks.put(subTask.getId(), subTask);
+        subTasksID.add(subTask.getId());
         System.out.println("Задача добавлена в эпик.");
     }
 
     public void deleteSubTaskById(int id) {
-        subTasks.remove(id);
+        subTasksID.remove((Integer) id);
         System.out.println("Подзадача удалена из эпика.");
     }
 
     public void deleteAllSubtasks() {
-        subTasks = new HashMap<>();
+        subTasksID = new ArrayList<>();
         System.out.println("Все задачи удалены из эпика.");
-    }
-
-    public void updateStatus() {
-        boolean allNew = true;
-        boolean allDone = true;
-        for (Integer key : subTasks.keySet()) {
-            SubTask subTask = subTasks.get(key);
-            if (subTask.getStatus() == TaskStatus.NEW) {
-                allDone = false;
-            } else if (subTask.getStatus() == TaskStatus.DONE) {
-                allNew = false;
-            }
-            if (!allDone && !allNew) {
-                super.setStatus(TaskStatus.IN_PROGRESS);
-                break;
-            } else if (allDone) {
-                super.setStatus(TaskStatus.DONE);
-            } else {
-                super.setStatus(TaskStatus.NEW);
-            }
-        }
     }
 }

@@ -15,102 +15,222 @@ public class Main {
             System.out.print("Выберите команду 1-8: ");
             command = scanner.nextInt();
             scanner.nextLine();
+            String name;
+            String description;
+            TaskStatus status;
+            int statusInt;
 
             if (command >= 1 && command <= 6) {
                 printSeparation();
                 printTaskType();
                 printSeparation();
-                String typeString = scanner.nextLine();
-                if (!typeString.equals("TASK") && !typeString.equals("EPIC") && !typeString.equals("SUBTASK")) {
+                int type = scanner.nextInt();
+                scanner.nextLine();
+                if (type != 1 && type != 2 && type != 3) {
                     System.out.println("Такого типа нет!");
                 } else {
-                    TaskType type = TaskType.valueOf(typeString);
                     int id;
                     switch (command) {
                         case 1:
-                            taskManager.printAllTasks(type);
+                            if (type == 1) {
+                                if (!taskManager.isTasksEmpty()) {
+                                    taskManager.printAllTasks();
+                                }
+                            }
+                            else if (type == 2) {
+                                if (!taskManager.isEpicsEmpty()) {
+                                    taskManager.printAllEpics();
+                                }
+                            }
+                            else {
+                                if (!taskManager.isSubTasksEmpty()) {
+                                    taskManager.printAllSubTasks();
+                                }
+                            }
                             break;
                         case 2:
-                            taskManager.deleteAllTasks(type);
+                            if (type == 1) taskManager.deleteAllTasks();
+                            else if (type == 2) taskManager.deleteAllEpics();
+                            else taskManager.deleteAllSubTasks();
                             break;
                         case 3:
-                            System.out.print("Введите id: ");
-                            id = scanner.nextInt();
-                            if (taskManager.findTaskById(id, type)) {
-                                taskManager.printTaskById(id, type);
+                            if (type == 1) {
+                                if (taskManager.isTasksEmpty()) {
+                                    break;
+                                }
+                                taskManager.printTasksId();
+                                System.out.print("Введите id: ");
+                                id = scanner.nextInt();
+                                scanner.nextLine();
+                                if (taskManager.isTaskById(id)) {
+                                    taskManager.printTaskById(id);
+                                }
+                            } else if (type == 2) {
+                                if (taskManager.isEpicsEmpty()) {
+                                    break;
+                                }
+                                taskManager.printEpicsId();
+                                System.out.print("Введите id: ");
+                                id = scanner.nextInt();
+                                scanner.nextLine();
+                                if (taskManager.isEpicById(id)) {
+                                    taskManager.printEpicById(id);
+                                }
+                            } else {
+                                if (taskManager.isSubTasksEmpty()) {
+                                    break;
+                                }
+                                taskManager.printSubTasksId();
+                                System.out.print("Введите id: ");
+                                id = scanner.nextInt();
+                                scanner.nextLine();
+                                if (taskManager.isSubTaskById(id)) {
+                                    taskManager.printSubTaskById(id);
+                                }
                             }
-                            scanner.nextLine();
                             break;
                         case 4:
-                            if (type == TaskType.SUBTASK && taskManager.isEpicsEmpty()) {
+                            if (type == 3 && taskManager.isEpicsEmpty()) {
                                 System.out.println("Нет созданных эпиков! Сначала добавьте эпик, " +
                                         "а потом уже подзадачи!");
                                 break;
                             }
-                            System.out.print("Введите имя задачи: ");
-                            String name = scanner.nextLine();
-                            System.out.print("Введите описание задачи: ");
-                            String description = scanner.nextLine();
-                            TaskStatus status;
-                            if (type != TaskType.EPIC) {
+                            System.out.print("Введите имя: ");
+                            name = scanner.nextLine();
+                            System.out.print("Введите описание: ");
+                            description = scanner.nextLine();
+                            if (type != 2) {
                                 printTaskStatus();
-                                String statusString = scanner.nextLine();
-                                if (!statusString.equals("NEW") && !statusString.equals("IN_PROGRESS") &&
-                                        !statusString.equals("DONE")) {
+                                statusInt = scanner.nextInt();
+                                scanner.nextLine();
+                                if (statusInt != 1 && statusInt != 2 && statusInt != 3) {
                                     System.out.println("Неверный статус!");
                                     break;
+                                } else if (statusInt == 1) {
+                                    status = TaskStatus.NEW;
+                                } else if (statusInt == 2) {
+                                    status = TaskStatus.IN_PROGRESS;
+                                } else {
+                                    status = TaskStatus.DONE;
                                 }
-                                status = TaskStatus.valueOf(statusString);
                             } else {
                                 status = TaskStatus.NEW;
                             }
 
-                            if (type == TaskType.SUBTASK) {
+                            if (type == 1) {
+                                Task task = new Task(name, description, status, taskManager.getNewId());
+                                taskManager.addNewTask(task);
+                            } else if (type == 2) {
+                                Epic epic = new Epic(name, description, taskManager.getNewId());
+                                taskManager.addNewEpic(epic);
+                            } else {
                                 System.out.println("К какому эпику относится эта подзадача?");
-                                taskManager.printAllTasks(TaskType.EPIC);
-                                System.out.print("Введите нужный id: ");
+                                taskManager.printAllEpics();
+                                System.out.print("Введите id нужного эпика: ");
                                 id = scanner.nextInt();
                                 scanner.nextLine();
-                                if (!taskManager.findTaskById(id, TaskType.EPIC)) break;
-                                taskManager.addNewTask(name, description, status, type, id);
-                            } else {
-                                taskManager.addNewTask(name, description, status, type, null);
+                                if (!taskManager.isEpicById(id))
+                                    break;
+                                SubTask subTask = new SubTask(name, description, status, taskManager.getNewId(), id);
+                                taskManager.addNewSubTask(subTask);
                             }
                             break;
                         case 5:
-                            taskManager.printAllTasks(type);
-                            System.out.print("Введите нужный id: ");
-                            id = scanner.nextInt();
+                            if (type == 1) {
+                                if (taskManager.isTasksEmpty()) {
+                                    break;
+                                }
+                                taskManager.printAllTasks();
+                                System.out.print("Введите нужный id задачи, которую хотите обновить: ");
+                                id = scanner.nextInt();
+                                if (!taskManager.isTaskById(id)) {
+                                    break;
+                                }
+                            } else if (type == 2) {
+                                if (taskManager.isEpicsEmpty()) {
+                                    break;
+                                }
+                                taskManager.printAllEpics();
+                                System.out.print("Введите нужный id эпика, который хотите обновить: ");
+                                id = scanner.nextInt();
+                                if (!taskManager.isEpicById(id)) {
+                                    break;
+                                }
+                            } else {
+                                if (taskManager.isSubTasksEmpty()) {
+                                    break;
+                                }
+                                taskManager.printAllSubTasks();
+                                System.out.print("Введите нужный id подзадачи, которую хотите обновить: ");
+                                id = scanner.nextInt();
+                                if (!taskManager.isSubTaskById(id)) {
+                                    break;
+                                }
+                            }
+
                             scanner.nextLine();
-                            if (!taskManager.findTaskById(id, type)) break;
-                            if (type == TaskType.TASK) {
-                                taskManager.updateTask(new Task(), id, TaskType.TASK);
-                            } else if (type == TaskType.EPIC) {
-                                taskManager.updateTask(new Epic(), id, TaskType.EPIC);
-                            } else if (type == TaskType.SUBTASK) {
-                                taskManager.updateTask(new SubTask(), id, TaskType.SUBTASK);
+                            System.out.print("Введите новое имя: ");
+                            name = scanner.nextLine();
+                            System.out.print("Введите новое описание: ");
+                            description = scanner.nextLine();
+                            if (type != 2) {
+                                printTaskStatus();
+                                statusInt = scanner.nextInt();
+                                scanner.nextLine();
+                            } else {
+                                statusInt = 1;
+                            }
+                            if (statusInt != 1 && statusInt != 2 && statusInt != 3) {
+                                System.out.println("Неверный статус!");
+                                break;
+                            } else if (statusInt == 1) {
+                                status = TaskStatus.NEW;
+                            } else if (statusInt == 2) {
+                                status = TaskStatus.IN_PROGRESS;
+                            } else {
+                                status = TaskStatus.DONE;
+                            }
+
+                            if (type == 1) {
+                                Task task = new Task(name, description, status, id);
+                                taskManager.updateTask(task);
+                            } else if (type == 2) {
+                                Epic epic = new Epic(name, description, id);
+                                taskManager.updateEpic(epic);
+                            } else {
+                                SubTask subTask = new SubTask(name, description, status, id,
+                                        taskManager.getSubTaskById(id).getEpicId());
+                                taskManager.updateSubTask(subTask);
                             }
                             break;
                         case 6:
-                            taskManager.printAllTasks(type);
+                            if (type == 1) {
+                                taskManager.printAllTasks();
+                            } else if (type == 2) {
+                                taskManager.printAllEpics();
+                            } else {
+                                taskManager.printAllSubTasks();
+                            }
                             System.out.print("Введите нужный id: ");
                             id = scanner.nextInt();
                             scanner.nextLine();
-                            if (taskManager.findTaskById(id, type)) {
-                                taskManager.deleteTaskById(id, type);
+                            if (type == 1) {
+                                taskManager.deleteTaskById(id);
+                            } else if (type == 2) {
+                                taskManager.deleteEpicById(id);
+                            } else {
+                                taskManager.deleteSubTaskById(id);
                             }
                             break;
                     }
                 }
             } else if (command == 7) {
-                if (taskManager.isEpicsEmpty()) {
-                    System.out.println("Ни один эпик пока не создан!");
-                } else {
-                    taskManager.printAllTasks(TaskType.EPIC);
+                if (!taskManager.isEpicsEmpty()) {
+                    taskManager.printAllEpics();
                     System.out.print("Введите нужный id: ");
                     int id = scanner.nextInt();
                     scanner.nextLine();
-                    if (taskManager.findTaskById(id, TaskType.EPIC)) {
+                    if (taskManager.isEpicById(id)) {
                         taskManager.printAllSubTasksFromEpic(id);
                     }
                 }
@@ -135,18 +255,18 @@ public class Main {
         System.out.println("8. Выход");
     }
 
-    public  static void printTaskType() {
+    public static void printTaskType() {
         System.out.println("Выберите тип задачи:");
-        System.out.println(TaskType.TASK);
-        System.out.println(TaskType.EPIC);
-        System.out.println(TaskType.SUBTASK);
+        System.out.println("1. Task");
+        System.out.println("2. Epic");
+        System.out.println("3. Subtask");
     }
 
-    public  static void printTaskStatus() {
+    public static void printTaskStatus() {
         System.out.println("Выберите статус задачи:");
-        System.out.println(TaskStatus.NEW);
-        System.out.println(TaskStatus.IN_PROGRESS);
-        System.out.println(TaskStatus.DONE);
+        System.out.println("1. " + TaskStatus.NEW);
+        System.out.println("2. " + TaskStatus.IN_PROGRESS);
+        System.out.println("3. " + TaskStatus.DONE);
     }
 
     public static void printSeparation() {
