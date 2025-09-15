@@ -33,19 +33,13 @@ public class Main {
                     switch (command) {
                         case 1:
                             if (type == 1) {
-                                if (!taskManager.isTasksEmpty()) {
-                                    taskManager.printAllTasks();
-                                }
+                                taskManager.printAllTasks();
                             }
                             else if (type == 2) {
-                                if (!taskManager.isEpicsEmpty()) {
-                                    taskManager.printAllEpics();
-                                }
+                                taskManager.printAllEpics();
                             }
                             else {
-                                if (!taskManager.isSubTasksEmpty()) {
-                                    taskManager.printAllSubTasks();
-                                }
+                                taskManager.printAllSubTasks();
                             }
                             break;
                         case 2:
@@ -55,46 +49,26 @@ public class Main {
                             break;
                         case 3:
                             if (type == 1) {
-                                if (taskManager.isTasksEmpty()) {
-                                    break;
-                                }
-                                taskManager.printTasksId();
+                                //taskManager.printTasksId();
                                 System.out.print("Введите id: ");
                                 id = scanner.nextInt();
                                 scanner.nextLine();
-                                if (taskManager.isTaskById(id)) {
-                                    taskManager.printTaskById(id);
-                                }
+                                Task task = taskManager.getTaskById(id);
                             } else if (type == 2) {
-                                if (taskManager.isEpicsEmpty()) {
-                                    break;
-                                }
-                                taskManager.printEpicsId();
+                                //taskManager.printEpicsId();
                                 System.out.print("Введите id: ");
                                 id = scanner.nextInt();
                                 scanner.nextLine();
-                                if (taskManager.isEpicById(id)) {
-                                    taskManager.printEpicById(id);
-                                }
+                                Epic epic = taskManager.getEpicById(id);
                             } else {
-                                if (taskManager.isSubTasksEmpty()) {
-                                    break;
-                                }
-                                taskManager.printSubTasksId();
+                                //taskManager.printSubTasksId();
                                 System.out.print("Введите id: ");
                                 id = scanner.nextInt();
                                 scanner.nextLine();
-                                if (taskManager.isSubTaskById(id)) {
-                                    taskManager.printSubTaskById(id);
-                                }
+                                SubTask subTask = taskManager.getSubTaskById(id);
                             }
                             break;
                         case 4:
-                            if (type == 3 && taskManager.isEpicsEmpty()) {
-                                System.out.println("Нет созданных эпиков! Сначала добавьте эпик, " +
-                                        "а потом уже подзадачи!");
-                                break;
-                            }
                             System.out.print("Введите имя: ");
                             name = scanner.nextLine();
                             System.out.print("Введите описание: ");
@@ -118,10 +92,10 @@ public class Main {
                             }
 
                             if (type == 1) {
-                                Task task = new Task(name, description, status, taskManager.getNewId());
+                                Task task = new Task(name, description, status);
                                 taskManager.addNewTask(task);
                             } else if (type == 2) {
-                                Epic epic = new Epic(name, description, taskManager.getNewId());
+                                Epic epic = new Epic(name, description);
                                 taskManager.addNewEpic(epic);
                             } else {
                                 System.out.println("К какому эпику относится эта подзадача?");
@@ -129,43 +103,23 @@ public class Main {
                                 System.out.print("Введите id нужного эпика: ");
                                 id = scanner.nextInt();
                                 scanner.nextLine();
-                                if (!taskManager.isEpicById(id))
-                                    break;
-                                SubTask subTask = new SubTask(name, description, status, taskManager.getNewId(), id);
+                                SubTask subTask = new SubTask(name, description, status, id);
                                 taskManager.addNewSubTask(subTask);
                             }
                             break;
                         case 5:
                             if (type == 1) {
-                                if (taskManager.isTasksEmpty()) {
-                                    break;
-                                }
                                 taskManager.printAllTasks();
                                 System.out.print("Введите нужный id задачи, которую хотите обновить: ");
                                 id = scanner.nextInt();
-                                if (!taskManager.isTaskById(id)) {
-                                    break;
-                                }
                             } else if (type == 2) {
-                                if (taskManager.isEpicsEmpty()) {
-                                    break;
-                                }
                                 taskManager.printAllEpics();
                                 System.out.print("Введите нужный id эпика, который хотите обновить: ");
                                 id = scanner.nextInt();
-                                if (!taskManager.isEpicById(id)) {
-                                    break;
-                                }
                             } else {
-                                if (taskManager.isSubTasksEmpty()) {
-                                    break;
-                                }
                                 taskManager.printAllSubTasks();
                                 System.out.print("Введите нужный id подзадачи, которую хотите обновить: ");
                                 id = scanner.nextInt();
-                                if (!taskManager.isSubTaskById(id)) {
-                                    break;
-                                }
                             }
 
                             scanner.nextLine();
@@ -192,15 +146,29 @@ public class Main {
                             }
 
                             if (type == 1) {
-                                Task task = new Task(name, description, status, id);
-                                taskManager.updateTask(task);
+                                Task task = taskManager.getTaskById(id);
+                                if (task != null) {
+                                    task.setName(name);
+                                    task.setDescription(description);
+                                    task.setStatus(status);
+                                    taskManager.updateTask(task);
+                                }
                             } else if (type == 2) {
-                                Epic epic = new Epic(name, description, id);
-                                taskManager.updateEpic(epic);
+                                Epic epic = taskManager.getEpicById(id);
+                                if (epic != null) {
+                                    epic.setName(name);
+                                    epic.setDescription(description);
+                                    epic.setStatus(TaskStatus.NEW);
+                                    taskManager.updateEpic(epic);
+                                }
                             } else {
-                                SubTask subTask = new SubTask(name, description, status, id,
-                                        taskManager.getSubTaskById(id).getEpicId());
-                                taskManager.updateSubTask(subTask);
+                                SubTask subTask = taskManager.getSubTaskById(id);
+                                if (subTask != null) {
+                                    subTask.setName(name);
+                                    subTask.setDescription(description);
+                                    subTask.setStatus(status);
+                                    taskManager.updateSubTask(subTask);
+                                }
                             }
                             break;
                         case 6:
@@ -225,15 +193,11 @@ public class Main {
                     }
                 }
             } else if (command == 7) {
-                if (!taskManager.isEpicsEmpty()) {
-                    taskManager.printAllEpics();
-                    System.out.print("Введите нужный id: ");
-                    int id = scanner.nextInt();
-                    scanner.nextLine();
-                    if (taskManager.isEpicById(id)) {
-                        taskManager.printAllSubTasksFromEpic(id);
-                    }
-                }
+                taskManager.printAllEpics();
+                System.out.print("Введите нужный id: ");
+                int id = scanner.nextInt();
+                scanner.nextLine();
+                taskManager.printAllSubTasksFromEpic(id);
             } else if (command == 8) {
                 System.out.println("До свидания!");
                 break;

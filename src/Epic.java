@@ -8,8 +8,8 @@ public class Epic extends Task {
         return (super.toString() + ", " + "\n subTasks=" + subTasksID.toString());
     }
 
-    public Epic(String name, String description, int id) {
-        super(name, description, TaskStatus.NEW, id);
+    public Epic(String name, String description) {
+        super(name, description, TaskStatus.NEW);
     }
 
     public ArrayList<Integer> getSubTasksID() {
@@ -27,7 +27,7 @@ public class Epic extends Task {
     }
 
     public void deleteAllSubtasks() {
-        subTasksID = new ArrayList<>();
+        subTasksID.clear();
         System.out.println("Все задачи удалены из эпика.");
     }
 }
