@@ -12,7 +12,7 @@ public class TaskManager {
         subTasks = new HashMap<>();
     }
 
-    public int getNewId() { // creating an id for a new task
+    private int getNewId() { // creating an id for a new task
         return ++tasksCounter;
     }
 
@@ -44,30 +44,6 @@ public class TaskManager {
             System.out.print((++i) + ". " + subTasks.get(key));
         }
     }
-
-//    public void printTasksId() {
-//        System.out.print("Tasks' IDs: ");
-//        for (int key : tasks.keySet()) {
-//            System.out.print(key + " ");
-//        }
-//        System.out.println();
-//    }
-//
-//    public void printEpicsId() {
-//        System.out.print("Epics' IDs: ");
-//        for (int key : epics.keySet()) {
-//            System.out.print(key + " ");
-//        }
-//        System.out.println();
-//    }
-//
-//    public void printSubTasksId() {
-//        System.out.print("SubTasks' IDs: ");
-//        for (int key : subTasks.keySet()) {
-//            System.out.print(key + " ");
-//        }
-//        System.out.println();
-//    }
 
     //PRINTING ALL
     public void printAllTasks() {
@@ -116,30 +92,15 @@ public class TaskManager {
 
     //FINDING BY ID
     private boolean isTaskById(int id) {
-        if (tasks.containsKey(id)) {
-            return true;
-        } else {
-            System.out.println("Задачи с таким id нет в списке!");
-            return false;
-        }
+        return tasks.containsKey(id);
     }
 
     private boolean isEpicById(int id) {
-        if (epics.containsKey(id)) {
-            return true;
-        } else {
-            System.out.println("Эпика с таким id нет в списке!");
-            return false;
-        }
+        return epics.containsKey(id);
     }
 
     private boolean isSubTaskById(int id) {
-        if (subTasks.containsKey(id)) {
-            return true;
-        } else {
-            System.out.println("Подзадачи с таким id нет в списке!");
-            return false;
-        }
+        return tasks.containsKey(id);
     }
 
     //ADDING NEW
@@ -187,25 +148,6 @@ public class TaskManager {
             subTasks.remove(id);
         }
     }
-
-    //PRINTING BY ID
-//    public void printTaskById(int id) {
-//        if (isTaskById(id)) {
-//            System.out.println(tasks.get(id));
-//        }
-//    }
-//
-//    public void printEpicById(int id) {
-//        if (isEpicById(id)) {
-//            System.out.println(epics.get(id));
-//        }
-//    }
-//
-//    public void printSubTaskById(int id) {
-//        if (isSubTaskById(id)) {
-//            System.out.println(subTasks.get(id));
-//        }
-//    }
 
     //UPDATING
     public void updateTask(Task task) {
