@@ -6,6 +6,9 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     @Override
     public void add(Task task) {
+        if (isHistoryFull()) {
+            history.removeFirst();
+        }
         history.add(task);
     }
 
@@ -14,7 +17,7 @@ public class InMemoryHistoryManager implements HistoryManager{
         return history;
     }
 
-    public boolean isHistoryFull() {
+    private boolean isHistoryFull() {
         return history.size() >= 10;
     }
 }

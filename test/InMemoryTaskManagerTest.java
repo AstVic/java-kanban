@@ -1,13 +1,14 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class InMemoryTaskManagerTest {
 
-    static InMemoryTaskManager inMemoryTaskManager;
+    InMemoryTaskManager inMemoryTaskManager;
 
-    @BeforeAll
-    public static void createTasks() {
+    @BeforeEach
+    public void createTasks() {
         inMemoryTaskManager = new InMemoryTaskManager();
         inMemoryTaskManager.addNewTask(new Task("T1", null, TaskStatus.DONE)); //1
         inMemoryTaskManager.addNewEpic(new Epic("E1", null)); //2

@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 
 public class TaskTest {
-    static TaskManager taskManager;
+    TaskManager taskManager;
 
-    @BeforeAll
-    public static void createTasks() {
+    @BeforeEach
+    public void createTasks() {
         taskManager = Managers.getDefault();
         taskManager.addNewTask(new Task("T1", null, TaskStatus.DONE)); //1
         taskManager.addNewEpic(new Epic("E1", null)); //2

@@ -1,15 +1,16 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ManagersTest {
-    static TaskManager taskManager;
-    static HistoryManager historyManager;
+    TaskManager taskManager;
+    HistoryManager historyManager;
 
-    @BeforeAll
-    public static void create() {
+    @BeforeEach
+    public void create() {
         taskManager = Managers.getDefault();
-        historyManager = taskManager.getHistoryManager();
+        historyManager = Managers.getDefaultHistory();
     }
 
     @Test

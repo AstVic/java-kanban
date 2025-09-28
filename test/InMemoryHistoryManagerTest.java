@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 public class InMemoryHistoryManagerTest {
-    static InMemoryTaskManager inMemoryTaskManager;
-    static InMemoryHistoryManager inMemoryHistoryManager;
+    InMemoryTaskManager inMemoryTaskManager;
+    InMemoryHistoryManager inMemoryHistoryManager;
 
     @BeforeEach
     public void createTasks() {

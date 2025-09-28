@@ -1,4 +1,15 @@
+import java.util.List;
+import java.util.Map;
+
 public interface TaskManager {
+
+    //GETTING LISTS
+    List<Integer> getAllSubTasksFromEpic(int id);
+
+    Map<Integer, Task> getAllTasks();
+    Map<Integer, Epic> getAllEpics();
+    Map<Integer, SubTask> getAllSubTasks();
+
     void printAllSubTasksFromEpic(int id);
 
     //PRINTING ALL
@@ -45,5 +56,5 @@ public interface TaskManager {
 
     void updateEpicStatusById(int id);
 
-    HistoryManager getHistoryManager();
+    List<Task> getHistory();
 }

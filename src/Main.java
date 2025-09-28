@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Поехали!");
         TaskManager taskManager = Managers.getDefault();
-        HistoryManager historyManager = taskManager.getHistoryManager();
+        //HistoryManager historyManager = Managers.getDefaultHistory();
         Scanner scanner = new Scanner(System.in);
         int command;
 
@@ -202,7 +202,7 @@ public class Main {
                 taskManager.printAllSubTasksFromEpic(id);
             } else if (command == 8) {
                 int i = 0;
-                List<Task> history = historyManager.getHistory();
+                List<Task> history = taskManager.getHistory();
                 for (Task task: history) {
                     System.out.println((++i) + ". " + task);
                 }

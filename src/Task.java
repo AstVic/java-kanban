@@ -4,6 +4,12 @@ public class Task {
     private int id;
     private TaskStatus status;
 
+    public Task(String name, String description, TaskStatus status) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         String result = "name='" + name + "', description=";
@@ -13,12 +19,6 @@ public class Task {
             result += "0";
         result += ", id='" + id + "', status='" + status.toString() + "'";
         return result;
-    }
-
-    public Task(String name, String description, TaskStatus status) {
-        this.name = name;
-        this.description = description;
-        this.status = status;
     }
 
     public int getId() {
