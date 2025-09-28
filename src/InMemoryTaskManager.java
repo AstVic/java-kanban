@@ -17,6 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager = Managers.getDefaultHistory();
     }
 
+    @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
     }
@@ -49,23 +50,41 @@ public class InMemoryTaskManager implements TaskManager {
 
     //GETTING
     @Override
-    public List<Integer> getAllSubTasksFromEpic(int id) {
-        return epics.get(id).getSubTasksID();
+    public List<SubTask> getAllSubTasksFromEpic(int id) {
+        List<SubTask> epicsSubTasks = new ArrayList<>(); //список для хранения сабтасков конкретного эпика
+        for (int subTaskId: subTasks.keySet()) { //проходимся по всем сабтаскам
+            if (subTasks.get(subTaskId).getEpicId() == id) { //если сабтаска принадлежит нашему эпику, добавляем ее в результат
+                epicsSubTasks.add(subTasks.get(subTaskId));
+            }
+        }
+        return epicsSubTasks;
     }
 
     @Override
-    public Map<Integer, Task> getAllTasks() {
-        return tasks;
+    public List<Task> getAllTasks() {
+        List<Task> returnTasks = new ArrayList<>();
+        for (Integer taskId: tasks.keySet()) {
+            returnTasks.add(tasks.get(taskId));
+        }
+        return returnTasks;
     }
 
     @Override
-    public Map<Integer, Epic> getAllEpics() {
-        return epics;
+    public List<Epic> getAllEpics() {
+        List<Epic> returnEpics = new ArrayList<>();
+        for (Integer epicId: epics.keySet()) {
+            returnEpics.add(epics.get(epicId));
+        }
+        return returnEpics;
     }
 
     @Override
-    public Map<Integer, SubTask> getAllSubTasks() {
-        return subTasks;
+    public List<SubTask> getAllSubTasks() {
+        List<SubTask> returnSubTasks = new ArrayList<>();
+        for (Integer subTaskId: subTasks.keySet()) {
+            returnSubTasks.add(subTasks.get(subTaskId));
+        }
+        return returnSubTasks;
     }
 
     @Override
@@ -256,8 +275,7 @@ public class InMemoryTaskManager implements TaskManager {
         return null;
     }
 
-    @Override
-    public void updateEpicStatusById(int id) {
+    private void updateEpicStatusById(int id) {
         Epic epic = epics.get(id);
         boolean allNew = true;
         boolean allDone = true;
