@@ -16,18 +16,20 @@ public class Epic extends Task {
         return subTasksID;
     }
 
-    public void addSubTask(SubTask subTask) {
-        subTasksID.add(subTask.getId());
-        System.out.println("Задача добавлена в эпик.");
+    public void addSubTask(Task subTask) {
+        if (subTask.getId() != this.getId()) {
+            subTasksID.add(subTask.getId());
+        }
+        //System.out.println("Задача добавлена в эпик.");
     }
 
     public void deleteSubTaskById(int id) {
         subTasksID.remove((Integer) id);
-        System.out.println("Подзадача удалена из эпика.");
+        //System.out.println("Подзадача удалена из эпика.");
     }
 
     public void deleteAllSubtasks() {
         subTasksID.clear();
-        System.out.println("Все задачи удалены из эпика.");
+        //System.out.println("Все задачи удалены из эпика.");
     }
 }

@@ -1,10 +1,12 @@
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
         System.out.println("Поехали!");
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = Managers.getDefault();
+        HistoryManager historyManager = taskManager.getHistoryManager();
         Scanner scanner = new Scanner(System.in);
         int command;
 
@@ -199,6 +201,13 @@ public class Main {
                 scanner.nextLine();
                 taskManager.printAllSubTasksFromEpic(id);
             } else if (command == 8) {
+                int i = 0;
+                List<Task> history = historyManager.getHistory();
+                for (Task task: history) {
+                    System.out.println((++i) + ". " + task);
+                }
+
+            } else if (command == 9) {
                 System.out.println("До свидания!");
                 break;
             } else {
@@ -216,7 +225,8 @@ public class Main {
         System.out.println("5. Обновить задачу/эпик/подзадачу по идентификатору");
         System.out.println("6. Удалить задачу/эпик/подзадачу по идентификатору");
         System.out.println("7. Вывести список подзадач эпика по идентификатору");
-        System.out.println("8. Выход");
+        System.out.println("8. Вывести историю");
+        System.out.println("9. Выход");
     }
 
     public static void printTaskType() {
